@@ -6,8 +6,8 @@ Adapt the d3 showreel example from https://github.com/mbostock/d3/tree/master/ex
 To run, download the zip or tar of these files, extract, and in R
 
 
-    `require(shiny)`
+    require(shiny)
     
-    `runApp("c:\\path-to-downloaded-and-extracted")`
+    runApp("c:\\path-to-downloaded-and-extracted")
     
   
