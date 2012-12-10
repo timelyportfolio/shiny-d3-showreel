@@ -16,21 +16,26 @@ svg {
 
 <script src="http://d3js.org/d3.v2.js"></script>
 <script type="text/javascript">
-    var stocks,
-        symbols;
     var networkOutputBinding = new Shiny.OutputBinding();
   $.extend(networkOutputBinding, {
     find: function(scope) {
       return $(scope).find('.shiny-network-output');
     },
     renderValue: function(el, data) {
-        
-        
-        
-var margin = {top: 120, right: 60, bottom: 60, left: 60},
-    width = 1280 - margin.right - margin.left,
-    height = 720 - margin.top - margin.bottom;
+        //remove the old graph
+          var svg = d3.select(el).select("svg");
 
+          svg.remove();
+          
+          $(el).html("");        
+
+
+        
+var margin = {top: 20, right: 20, bottom: 20, left: 20},
+    width = 1000 - margin.right - margin.left,
+    height = 720 - margin.top - margin.bottom;
+    
+        
 var x = d3.time.scale()
     .range([0, width - 60]);
 
@@ -42,14 +47,16 @@ var duration = 1500,
 
 var color = d3.scale.category10();
 
-var svg = d3.select("body").append("svg")
+          //append a new one
+          svg = d3.select(el).append("svg")
+              
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//var stocks,
-//    symbols;
+var stocks,
+    symbols;
 
 // A line generator, for the dark stroke.
 var line = d3.svg.line()
