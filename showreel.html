@@ -30,6 +30,9 @@ svg {
           $(el).html("");        
 
 
+//almost all code here comes from http://d3js.org/ showreel example
+//only change really was to get data from r and shiny rather than stocks.csv file
+//within R also do cumulative return which is slightly more useful on the majority of the charts
         
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = 1000 - margin.right - margin.left,
@@ -566,82 +569,6 @@ function donut() {
   setTimeout(donutExplode, duration + delay);
 }
 
-/*
-function donutTransition() {
-  var r0 = height / 2 - x.rangeBand() / 2,
-      r1 = height / 2,
-      pie1 = d3.layout.pie().value(function(d) { return d.sumPrice; })(symbols),
-      pie2 = d3.layout.pie().value(function(d) { return d.maxPrice; })(symbols),
-      arc = d3.svg.arc();
-
-  svg.selectAll(".symbol path")
-      .datum(function(d, i) {
-        d = pie1[i];
-        d.innerRadius = r0;
-        d.outerRadius = r1;
-        d.next = pie2[i];
-        return d;
-      })
-      .each(transitionSplit);
-
-  function transitionSplit(d, i) {
-    d3.select(this).transition()
-        .duration(duration / 2)
-        .tween("arc", tweenArc({
-          innerRadius: i & 1 ? r0 : (r0 + r1) / 2,
-          outerRadius: i & 1 ? (r0 + r1) / 2 : r1
-        }))
-        .each("end", transitionRotate);
-  }
-
-  function transitionRotate(d, i) {
-    var a0 = d.next.startAngle + d.next.endAngle,
-        a1 = d.startAngle - d.endAngle;
-    d3.select(this).transition()
-        .duration(duration / 2)
-        .tween("arc", tweenArc({
-          startAngle: (a0 + a1) / 2,
-          endAngle: (a0 - a1) / 2
-        }))
-        .each("end", transitionResize);
-  }
-
-  function transitionResize(d, i) {
-    d3.select(this).transition()
-        .duration(duration / 2)
-        .tween("arc", tweenArc({
-          startAngle: d.next.startAngle,
-          endAngle: d.next.endAngle
-        }))
-        .each("end", transitionUnite);
-  }
-
-  function transitionUnite(d, i) {
-    d3.select(this).transition()
-        .duration(duration / 2)
-        .tween("arc", tweenArc({
-          innerRadius: r0,
-          outerRadius: r1
-        }));
-  }
-
-  function tweenArc(b) {
-    return function(a) {
-      var path = d3.select(this),
-          text = d3.select(this.nextSibling),
-          i = d3.interpolate(a, b);
-      for (var key in b) a[key] = b[key]; // update data
-      return function(t) {
-        var a = i(t);
-        path.attr("d", arc(a));
-        text.attr("transform", "translate(" + arc.centroid(a) + ")translate(" + width / 2 + "," + height / 2 +")rotate(" + ((a.startAngle + a.endAngle) / 2 + 3 * Math.PI / 2) * 180 / Math.PI + ")");
-      };
-    }
-  }
-
-  setTimeout(donutExplode, 2 * duration + delay);
-}
-*/
 
 function donutExplode() {
   var r0a = height / 2 - x.rangeBand() / 2,

@@ -4,10 +4,10 @@ reactiveSvg <- function (outputId)
 }
 
 shinyUI(pageWithSidebar(
-                        headerPanel(title="d3 Showreel Example Using Data Supplied by R"),
+                        headerPanel(title="d3 Showreel Example Using Data Supplied by R and Yahoo! Finance"),
                         
                         sidebarPanel(
-                            helpText(HTML("All source available on <a href = \"https://github.com/timelyportfolio/d3-shiny-plot\">Github</a>"))
+                            helpText(HTML("All source available on <a href = \"https://github.com/timelyportfolio/shiny-d3-showreel\">Github</a>"))
                         ),
                         
                         mainPanel(
