@@ -15,13 +15,18 @@ svg {
 </style>
 
 <script src="http://d3js.org/d3.v2.js"></script>
-<script type="text/javascript">var networkOutputBinding = new Shiny.OutputBinding();
+<script type="text/javascript">
+    var stocks,
+        symbols;
+    var networkOutputBinding = new Shiny.OutputBinding();
   $.extend(networkOutputBinding, {
     find: function(scope) {
       return $(scope).find('.shiny-network-output');
     },
     renderValue: function(el, data) {
-
+        
+        
+        
 var margin = {top: 120, right: 60, bottom: 60, left: 60},
     width = 1280 - margin.right - margin.left,
     height = 720 - margin.top - margin.bottom;
@@ -43,8 +48,8 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var stocks,
-    symbols;
+//var stocks,
+//    symbols;
 
 // A line generator, for the dark stroke.
 var line = d3.svg.line()
@@ -64,12 +69,24 @@ var area = d3.svg.area()
     .x(function(d) { return x(d.date); })
     .y0(height / 4 - 20)
     .y1(function(d) { return y(d.price); });
+        
 
-d3.csv("./www/stocks.csv", function(data) {
+
+//d3.csv("./www/stocks.csv", function(data) {
   var parse = d3.time.format("%b %Y").parse,
       filter = {AAPL: 1, AMZN: 1, MSFT: 1, IBM: 1};
+  
+  var datatranslated =  []
+      
+  for (var inc=0;inc<data.date.length;inc++)  { 
+        //here is where my javascript ineptness shows best
+        //i need to figure out the proper way to 
+        //     get r and shiny to send an array of objects rather than object of arrays
+        //     or cleanly loop through to do the conversion in javascript
+        datatranslated[inc]  = { date: parse(data.date[inc]) , price : parseFloat(data.price[inc]), symbol : data.symbol[inc] };
+    }
 
-  stocks = data.filter(function(d) { return d.symbol in filter; });
+  stocks = datatranslated.filter(function(d) { return d.symbol in filter; });
 
   // Nest stock values by symbol.
   symbols = d3.nest()
@@ -79,7 +96,7 @@ d3.csv("./www/stocks.csv", function(data) {
   // Parse dates and numbers. We assume values are sorted by date.
   // Also compute the maximum price per symbol, needed for the y-domain.
   symbols.forEach(function(s) {
-    s.values.forEach(function(d) { d.date = parse(d.date); d.price = +d.price; });
+    //s.values.forEach(function(d) { d.date = parse(d.date); d.price = +d.price; });
     s.maxPrice = d3.max(s.values, function(d) { return d.price; });
     s.sumPrice = d3.sum(s.values, function(d) { return d.price; });
   });
@@ -99,7 +116,7 @@ d3.csv("./www/stocks.csv", function(data) {
       .attr("class", "symbol");
 
   setTimeout(lines, duration);
-});
+//});
 
 function lines() {
 
@@ -654,7 +671,13 @@ function donutExplode() {
     }
   }
 }
-
+        
+        
+        
+        
+        
+        
     }
   });
   Shiny.outputBindings.register(networkOutputBinding, 'timelyportfolio.networkbinding');
+</script>

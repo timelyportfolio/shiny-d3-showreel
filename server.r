@@ -6,6 +6,9 @@ shinyServer(function(input, output) {
   #use the structure from trestletechnology example to load data
   data <- reactive(function(){
     path <- paste("./www/", "stocks.csv",sep="")
-    data <- read.csv(path, row.names=1)
+    data <- read.csv(path, header=TRUE)
+    data
   })
+  
+  output$showreel <- reactive(function() { data() })
 })
