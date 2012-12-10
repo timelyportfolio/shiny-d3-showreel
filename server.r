@@ -1,12 +1,31 @@
 #enter any requires/library here
-#require(quantmod)
+require(quantmod)
 #require(PerformanceAnalytics)
 
 shinyServer(function(input, output) {
   #use the structure from trestletechnology example to load data
   data <- reactive(function(){
-    path <- paste("./www/", "stocks.csv",sep="")
-    data <- read.csv(path, header=TRUE)
+    tckrs <- c("MSFT","AAPL","AMZN","IBM")
+    getSymbols(tckrs, from="1999-12-31")
+    
+    
+    #do silly function to convert an xts into a monthly data.frame of adj.close
+    convert.xts.to.df <- function(x) {
+      x.monthly <- to.monthly(x)
+      x.df <- data.frame(rep(unlist(strsplit(colnames(x)[1],"\\."))[1],NROW(x.monthly)),
+                    format(index(x.monthly),"%b %Y"),
+                    coredata(x.monthly)[,6], stringsAsFactors=FALSE)
+      colnames(x.df) <- c("symbol","date","price")
+      x.df[,3] <- as.numeric(x.df[,3])
+      x.df
+    }
+    
+    data <- rbind(
+      convert.xts.to.df(MSFT),
+      convert.xts.to.df(AAPL),
+      convert.xts.to.df(AMZN),
+      convert.xts.to.df(IBM))
+    
     data
   })
   
